@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace RunInTray
 {
     public class TaskTrayApplicationContext : ApplicationContext
-    {  
+    {
         private readonly NotifyIcon _notifyIcon = new NotifyIcon();
 
         public TaskTrayApplicationContext()
@@ -51,7 +51,7 @@ namespace RunInTray
             _notifyIcon.ContextMenu.MenuItems.Cast<MenuItem>().First(i => i.Text == "Hide").Enabled = false;
         }
 
-        void Exit(object sender, EventArgs e)
+        private void Exit(object sender, EventArgs e)
         {
             _notifyIcon.ContextMenu.MenuItems.Cast<MenuItem>().First(i => i.Text == "Exit").Enabled = false;
 

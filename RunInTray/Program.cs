@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace RunInTray
 {
-    static class Program
+    internal static class Program
     {
         [DllImport("user32.dll")]
         internal static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
@@ -34,7 +34,7 @@ namespace RunInTray
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args?.Length < 1)
             {
@@ -50,14 +50,14 @@ runintray FILE [-t TITLE] [ARGUMENTS]
 
             ShowWindow(Process.GetCurrentProcess().MainWindowHandle, SW_HIDE);
 
-            if (args.Length > 2 && args[1].ToLower() == "-t") { // title provided
+            if (args.Length > 2 && string.Equals(args[1], "-t", StringComparison.OrdinalIgnoreCase)) { // title provided
                 TrayTitle = args[2];
             }
 
             string fullArguments = GetFullArguments(args);
             string subArguments = GetSubArguments(args);
 
-            string filePath = args[0];   
+            string filePath = args[0];
             string externalFileName = Path.GetFileNameWithoutExtension(filePath);
             string expectedName = externalFileName + "-tray.exe";
 
@@ -97,7 +97,6 @@ runintray FILE [-t TITLE] [ARGUMENTS]
             return $"\"{arg}\" "; // wrap in quotes to prevent whitespace issues
         }
 
-
         private static void Install(string newName, string arguments)
         {
             if (!Directory.Exists("generated"))
@@ -108,7 +107,7 @@ runintray FILE [-t TITLE] [ARGUMENTS]
             {
                 File.Copy(ThisFile, newFile);
                 Unblock(newFile);
-            }    
+            }
 
             Process.Start(newFile, arguments);
         }
@@ -122,9 +121,11 @@ runintray FILE [-t TITLE] [ARGUMENTS]
         {
             Icon = Icon.ExtractAssociatedIcon(filePath);
             Process = new Process();
-            Process.StartInfo = new ProcessStartInfo(filePath, subArguments);
-            Process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-            Process.StartInfo.WorkingDirectory = Path.GetDirectoryName(filePath);
+            Process.StartInfo = new ProcessStartInfo(filePath, subArguments)
+            {
+                WindowStyle = ProcessWindowStyle.Minimized,
+                WorkingDirectory = Path.GetDirectoryName(filePath)
+            };
             Process.EnableRaisingEvents = true;
             Process.Exited += Process_Exited;
             Process.Start();
