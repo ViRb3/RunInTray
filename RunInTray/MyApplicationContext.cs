@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Windows.Forms;
 
+using static RunInTray.NativeImports;
+
 namespace RunInTray
 {
     public class TaskTrayApplicationContext : ApplicationContext
@@ -37,7 +39,7 @@ namespace RunInTray
 
         private void Show(object sender, EventArgs e)
         {
-            Program.ShowWindow(Program.MainWindowHandle, Program.SW_NORMAL);
+            ShowWindow(Program.MainWindowHandle, SW_NORMAL);
             Program.MainWindowVisible = true;
             _notifyIcon.ContextMenu.MenuItems.Cast<MenuItem>().First(i => i.Text == "Show").Enabled = false;
             _notifyIcon.ContextMenu.MenuItems.Cast<MenuItem>().First(i => i.Text == "Hide").Enabled = true;
@@ -45,7 +47,7 @@ namespace RunInTray
 
         private void Hide(object sender, EventArgs e)
         {
-            Program.ShowWindow(Program.MainWindowHandle, Program.SW_HIDE);
+            ShowWindow(Program.MainWindowHandle, SW_HIDE);
             Program.MainWindowVisible = false;
             _notifyIcon.ContextMenu.MenuItems.Cast<MenuItem>().First(i => i.Text == "Show").Enabled = true;
             _notifyIcon.ContextMenu.MenuItems.Cast<MenuItem>().First(i => i.Text == "Hide").Enabled = false;
@@ -57,7 +59,7 @@ namespace RunInTray
 
             if (!Program.MainWindowVisible)
             {
-                Program.ShowWindow(Program.MainWindowHandle, Program.SW_MINIMIZE);
+                ShowWindow(Program.MainWindowHandle, SW_MINIMIZE);
                 Program.WaitForWindow();
             }
 
