@@ -2,7 +2,7 @@
 
 namespace RunInTray
 {
-    public static class ConsoleUtils
+    internal static class ConsoleUtils
     {
         public static void ShowHelp()
         {

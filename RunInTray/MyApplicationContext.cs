@@ -6,7 +6,7 @@ using static RunInTray.NativeImports;
 
 namespace RunInTray
 {
-    public class TaskTrayApplicationContext : ApplicationContext
+    internal class TaskTrayApplicationContext : ApplicationContext
     {
         private readonly NotifyIcon _notifyIcon = new NotifyIcon();
 

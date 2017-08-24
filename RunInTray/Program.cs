@@ -5,11 +5,9 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 
-using static RunInTray.NativeImports;
-
 namespace RunInTray
 {
-    public static class Program
+    internal static class Program
     {
         public static Icon Icon;
         public static Process Process;
@@ -31,7 +29,7 @@ namespace RunInTray
                 return;
             }
 
-            ShowWindow(Process.GetCurrentProcess().MainWindowHandle, SW_HIDE);
+            NativeImports.ShowWindow(Process.GetCurrentProcess().MainWindowHandle, NativeImports.SW_HIDE);
 
             if (args.Length > 2 && string.Equals(args[1], "-t", StringComparison.OrdinalIgnoreCase)) { // title provided
                 TrayTitle = args[2];
@@ -70,7 +68,7 @@ namespace RunInTray
 
         private static bool Unblock(string fileName)
         {
-            return DeleteFile(fileName + ":Zone.Identifier");
+            return NativeImports.DeleteFile(fileName + ":Zone.Identifier");
         }
 
         private static void RunTray(string filePath, string subArguments)
@@ -88,7 +86,7 @@ namespace RunInTray
 
             WaitForWindow();
             MainWindowHandle = Process.MainWindowHandle;
-            ShowWindow(MainWindowHandle, SW_HIDE);
+            NativeImports.ShowWindow(MainWindowHandle, NativeImports.SW_HIDE);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

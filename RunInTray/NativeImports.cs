@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace RunInTray
 {
-    public static class NativeImports
+    internal static class NativeImports
     {
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr hwnd, int nCmdShow);
